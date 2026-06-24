@@ -93,7 +93,8 @@ with st.sidebar:
 - Bonifasius Geraldo
 - Michael Julianto Sipahutar
 
-
+**Pembimbing:**
+Istas Pratomo Manalu, S.Si., M.Sc.
 """)
     st.divider()
     st.write("📍 **Posisi Terakhir Buoy:**")
