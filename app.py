@@ -61,26 +61,43 @@ def get_data():
         return pd.DataFrame(res.data)
     except: return pd.DataFrame()
 
-# --- FUNGSI GRAFIK ANTI-KEDIP ---
+# --- FUNGSI PEMBUAT GRAFIK ANTI-KOTAK SELEKSI ---
 def draw_grafana_chart(df, y_col, title, color, unique_key):
     fig = px.area(df, x="created_at", y=y_col, title=title, template="plotly_dark")
     fig.update_layout(
         margin=dict(l=0, r=0, t=40, b=0),
         height=250,
         colorway=[color],
-        xaxis=dict(showgrid=False, title=None),
-        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', title=None),
+        # 1. MATIKAN DRAGMODE (Ini yang menghilangkan kotak biru/screenshot)
+        dragmode=False, 
+        xaxis=dict(
+            showgrid=False, 
+            title=None,
+            # 2. KUNCI RENTANG (Agar tidak bergeser saat disentuh di HP)
+            fixedrange=True 
+        ),
+        yaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(255,255,255,0.05)', 
+            title=None,
+            # 2. KUNCI RENTANG
+            fixedrange=True 
+        ),
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
-        # PENTING: Mematikan durasi transisi agar grafik tidak melompat (penyebab kedipan)
-        transition_duration=0 
+        transition_duration=0,
+        title_font_size=16
     )
+    # 3. MATIKAN KONFIGURASI INTERAKSI PERMUKAAN
     st.plotly_chart(
         fig, 
         use_container_width=True, 
-        config={'displayModeBar': False, 'scrollZoom': True},
-        # PENTING: Menggunakan key yang stabil agar komponen tidak di-render ulang dari nol
-        key=unique_key 
+        config={
+            'displayModeBar': False, # Menghilangkan toolbar atas
+            'staticPlot': False,     # Grafik tetap hidup (hover angka masih ada)
+            'scrollZoom': False      # Mematikan zoom agar tidak berkedip
+        },
+        key=unique_key
     )
 
 # --- BAGIAN 1: SIDEBAR (STATIS) ---
